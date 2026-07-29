@@ -3,6 +3,9 @@
 This project is a Raspberry Pi-based AI system for food image classification, banana ripeness detection, freshness suggestions, and email alerts.
 
 The system first identifies selected fruits and vegetables from an uploaded or captured image. If the detected item is banana, a second model classifies the banana ripeness stage and provides a useful suggestion or recipe action. The result can also be sent through an email alert.
+The image below summarizes the main workflow of the deployed Raspberry Pi system.
+
+![Project workflow](assets/project_workflow.png)
 
 ## Features
 
