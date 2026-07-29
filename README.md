@@ -67,3 +67,15 @@ food-image-classification-freshness-alert/
         ├── banana_ripeness_model.tflite
         └── banana_ripeness_model_classes.txt
 
+
+## Dataset Acknowledgement
+
+This project uses publicly available image datasets for academic prototype development.
+
+- Fruit and Vegetable Image Recognition Dataset  
+  Used for training the food image classification model with selected classes: apple, banana, carrot, mango, potato, and tomato.
+
+- Banana Ripeness Classification Dataset  
+  Used for training the banana ripeness model with four classes: green, ripe, overripe, and rotten.
+
+The original datasets are not included in this repository. Users should download the datasets from their original sources and follow the dataset license and usage conditions.
