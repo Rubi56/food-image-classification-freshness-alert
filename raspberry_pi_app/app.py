@@ -6,6 +6,7 @@ import numpy as np
 from PIL import Image
 from flask import Flask, request, render_template_string
 
+
 try:
     import tflite_runtime.interpreter as tflite
     Interpreter = tflite.Interpreter
@@ -20,8 +21,6 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 IMG_SIZE = (224, 224)
 
-LOW_CONFIDENCE_LIMIT = 0.50
-BANANA_SAFETY_CONFIDENCE = 0.70
 
 FOOD_CATEGORY = {
     "apple": "Fruit",
@@ -90,10 +89,6 @@ HTML_PAGE = """
             font-weight: bold;
             color: #1b5e20;
         }
-        .warning {
-            font-size: 14px;
-            color: #8a5a00;
-        }
         .email {
             margin-top: 12px;
             font-weight: bold;
@@ -143,12 +138,6 @@ HTML_PAGE = """
             <p><b>Detected Item:</b> {{ result.item }}</p>
             <p><b>Category:</b> {{ result.category }}</p>
             <p><b>Item Confidence:</b> {{ result.item_confidence }}%</p>
-
-            {% if result.corrected %}
-                <p class="warning">
-                    Note: The first model had low confidence, so the banana ripeness model was also checked.
-                </p>
-            {% endif %}
 
             {% if result.ripeness %}
                 <p><b>Banana Ripeness:</b> {{ result.ripeness }}</p>
@@ -283,7 +272,6 @@ def index():
             image_path
         )
 
-        corrected = False
         ripeness = None
         ripeness_confidence = None
         suggestion = None
@@ -291,14 +279,11 @@ def index():
         email_status = None
 
         if item == "banana":
-            banana_stage, banana_stage_confidence = predict_tflite(
+            ripeness, ripeness_confidence = predict_tflite(
                 "models/banana_ripeness_model.tflite",
                 "models/banana_ripeness_model_classes.txt",
                 image_path
             )
-
-            ripeness = banana_stage
-            ripeness_confidence = banana_stage_confidence
 
             suggestion, recipe = get_suggestion_and_recipe(ripeness)
 
@@ -321,8 +306,7 @@ def index():
             "ripeness_confidence": round(float(ripeness_confidence) * 100, 2) if ripeness_confidence is not None else None,
             "suggestion": suggestion,
             "recipe": recipe,
-            "email_status": email_status,
-            "corrected": corrected
+            "email_status": email_status
         }
 
     return render_template_string(HTML_PAGE, result=result)
